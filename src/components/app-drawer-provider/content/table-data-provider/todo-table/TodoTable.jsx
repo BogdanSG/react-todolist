@@ -71,20 +71,25 @@ const styles = {
   }
 };
 
-const menuOptions = ["Edit", "Remove"];
-
 const MENU_ITEM_HEIGHT = 48;
 
 const TodoTable = ({ classes }) => {
   const { tableData, setTableData } = useContext(TableDataContext);
 
-  const [editDeleteMenu, setEditDeleteMenu] = useState(null);
+  //const [editDeleteMenu, setEditDeleteMenu] = useState(null);
+  const [editDeleteMenu, setEditDeleteMenu] = useState({
+    anchorEl: null,
+    index: 0
+  });
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const [rowIndex, setRowIndex] = useState(-1);
 
   const openEditDrawer = index => {
-    setRowIndex(index);
-    setTimeout(() => setDrawerIsOpen(true), 10);
+    if (index !== rowIndex) {
+      setRowIndex(index);
+      setTimeout(() => setDrawerIsOpen(true), 10);
+    } //if
+    else setDrawerIsOpen(true);
   }; //openEditDrawer
 
   return (
@@ -143,15 +148,22 @@ const TodoTable = ({ classes }) => {
                     <IconButton
                       aria-label="More"
                       aria-haspopup="true"
-                      onClick={e => setEditDeleteMenu(e.currentTarget)}
+                      onClick={e =>
+                        setEditDeleteMenu({
+                          anchorEl: e.currentTarget,
+                          index: index
+                        })
+                      }
                     >
                       <MoreVertIcon className={classes.menu} />
                     </IconButton>
                     <Menu
                       id="long-menu"
-                      anchorEl={editDeleteMenu}
-                      open={!!editDeleteMenu}
-                      onClose={() => setEditDeleteMenu(null)}
+                      anchorEl={editDeleteMenu.anchorEl}
+                      open={!!editDeleteMenu.anchorEl}
+                      onClose={() =>
+                        setEditDeleteMenu({ anchorEl: null, index: index })
+                      }
                       PaperProps={{
                         style: {
                           maxHeight: MENU_ITEM_HEIGHT * 4.5,
@@ -159,22 +171,29 @@ const TodoTable = ({ classes }) => {
                         }
                       }}
                     >
-                      {menuOptions.map((option, optionIndex) => (
-                        <MenuItem
-                          key={optionIndex}
-                          onClick={() => {
-                            if (option === "Edit") openEditDrawer(index);
-                            else {
-                              tableData.splice(index, 1);
-
-                              setTableData([...tableData]);
-                            } //else
-
-                            setEditDeleteMenu(null);
-                          }}
-                        >
-                          {option}
-                        </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          openEditDrawer(editDeleteMenu.index);
+                          setEditDeleteMenu({
+                            anchorEl: null,
+                            index: editDeleteMenu.index
+                          });
+                        }}
+                      >
+                        Edit
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          tableData.splice(editDeleteMenu.index, 1);
+                          setTableData([...tableData]);
+                          setEditDeleteMenu({
+                            anchorEl: null,
+                            index: editDeleteMenu.index
+                          });
+                        }}
+                      >
+                        Remove
+                      </MenuItem>
                       ))}
                     </Menu>
                   </Fragment>
@@ -186,7 +205,7 @@ const TodoTable = ({ classes }) => {
                   open={drawerIsOpen}
                   onClose={() => {
                     setDrawerIsOpen(false);
-                    setRowIndex(-1);
+                    //setRowIndex(-1);
                   }}
                 />
               )}

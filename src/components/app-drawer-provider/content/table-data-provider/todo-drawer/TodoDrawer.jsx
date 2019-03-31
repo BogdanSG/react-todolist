@@ -80,8 +80,10 @@ const TodoDrawer = ({ classes, open, value, onClose }) => {
   };
 
   const setDefaultState = () => {
-    setDeadline("");
-    setTask("");
+    if (!value) {
+      setDeadline("");
+      setTask("");
+    } //if
     setErrors({
       deadlineError: false,
       taskError: false
