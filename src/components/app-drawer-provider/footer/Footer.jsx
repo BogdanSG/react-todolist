@@ -1,25 +1,30 @@
-import React from "react";
+import React, { useContext } from "react";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import AppDrawerContext from "../../../contexts/app-drawer-context";
 import { withStyles } from "@material-ui/core/styles";
 
 const styles = {
-  root: {
-    marginTop: 10
+  footer: {
+    marginTop: 15
   },
   fabButton: {
     position: "absolute",
-    top: -30,
+    height: 70,
+    width: 70,
+    top: -35,
     right: 70
   }
 };
 
-const Footer = props => {
+const Footer = ({ classes }) => {
+  const { setIsDrawerOpen } = useContext(AppDrawerContext);
+
   return (
-    <AppBar position="static" color="primary" className={props.classes.root}>
+    <AppBar position="static" color="primary" className={classes.footer}>
       <Toolbar>
         <Typography variant="h6" color="inherit">
           Footer
@@ -27,7 +32,8 @@ const Footer = props => {
         <Fab
           color="secondary"
           aria-label="Add"
-          className={props.classes.fabButton}
+          onClick={() => setIsDrawerOpen(true)}
+          className={classes.fabButton}
         >
           <AddIcon />
         </Fab>

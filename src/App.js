@@ -1,11 +1,11 @@
 import React from "react";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import Store from "./components/store";
-import Header from "./components/header/header";
-import Content from "./components/content/content";
-import Footer from "./components/footer/footer";
-import "./App.css";
+import Header from "./components/app-drawer-provider/header/Header";
+import Content from "./components/app-drawer-provider/content/Content";
+import Footer from "./components/app-drawer-provider/footer/Footer";
+import AppDrawerProvider from "./components/app-drawer-provider/AppDrawerProvider";
 import { blue } from "@material-ui/core/colors";
+import Wrapper from "./ui-components/Wrapper";
 
 const theme = createMuiTheme({
   palette: {
@@ -24,16 +24,16 @@ const theme = createMuiTheme({
   }
 });
 
-const App = () => {
+const App = ({ classes }) => {
   return (
     <MuiThemeProvider theme={theme}>
-      <Store>
-        <div className="wrapper">
+      <AppDrawerProvider>
+        <Wrapper>
           <Header />
           <Content />
           <Footer />
-        </div>
-      </Store>
+        </Wrapper>
+      </AppDrawerProvider>
     </MuiThemeProvider>
   );
 };
