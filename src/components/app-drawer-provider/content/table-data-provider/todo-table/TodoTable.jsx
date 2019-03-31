@@ -108,7 +108,7 @@ const TodoTable = ({ classes }) => {
             <Fragment key={index}>
               <TableRow
                 onDoubleClick={() => {
-                  openEditDrawer(index);
+                  if (!row.done) openEditDrawer(index);
                 }}
                 className={row.done ? classes.rowDone : ""}
               >
@@ -172,6 +172,7 @@ const TodoTable = ({ classes }) => {
                       }}
                     >
                       <MenuItem
+                        disabled={tableData[editDeleteMenu.index].done}
                         onClick={() => {
                           openEditDrawer(editDeleteMenu.index);
                           setEditDeleteMenu({
