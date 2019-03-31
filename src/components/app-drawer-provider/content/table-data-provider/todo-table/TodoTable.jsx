@@ -79,7 +79,8 @@ const TodoTable = ({ classes }) => {
   //const [editDeleteMenu, setEditDeleteMenu] = useState(null);
   const [editDeleteMenu, setEditDeleteMenu] = useState({
     anchorEl: null,
-    index: 0
+    index: 0,
+    done: false
   });
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const [rowIndex, setRowIndex] = useState(-1);
@@ -151,7 +152,8 @@ const TodoTable = ({ classes }) => {
                       onClick={e =>
                         setEditDeleteMenu({
                           anchorEl: e.currentTarget,
-                          index: index
+                          index: index,
+                          done: row.done
                         })
                       }
                     >
@@ -162,7 +164,11 @@ const TodoTable = ({ classes }) => {
                       anchorEl={editDeleteMenu.anchorEl}
                       open={!!editDeleteMenu.anchorEl}
                       onClose={() =>
-                        setEditDeleteMenu({ anchorEl: null, index: index })
+                        setEditDeleteMenu({
+                          anchorEl: null,
+                          index: index,
+                          done: row.done
+                        })
                       }
                       PaperProps={{
                         style: {
@@ -172,12 +178,13 @@ const TodoTable = ({ classes }) => {
                       }}
                     >
                       <MenuItem
-                        disabled={tableData[editDeleteMenu.index].done}
+                        disabled={editDeleteMenu.done}
                         onClick={() => {
                           openEditDrawer(editDeleteMenu.index);
                           setEditDeleteMenu({
                             anchorEl: null,
-                            index: editDeleteMenu.index
+                            index: editDeleteMenu.index,
+                            done: row.done
                           });
                         }}
                       >
@@ -189,7 +196,8 @@ const TodoTable = ({ classes }) => {
                           setTableData([...tableData]);
                           setEditDeleteMenu({
                             anchorEl: null,
-                            index: editDeleteMenu.index
+                            index: -1,
+                            done: false
                           });
                         }}
                       >
@@ -206,7 +214,6 @@ const TodoTable = ({ classes }) => {
                   open={drawerIsOpen}
                   onClose={() => {
                     setDrawerIsOpen(false);
-                    //setRowIndex(-1);
                   }}
                 />
               )}
